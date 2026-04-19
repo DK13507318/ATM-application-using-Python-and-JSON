@@ -1,35 +1,159 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Dashboard</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>ATM Dashboard</title>
+
+<!-- Tailwind -->
+<script src="https://cdn.tailwindcss.com"></script>
+
+<!-- Chart.js -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script>
+tailwind.config = {
+  darkMode: 'class'
+}
+</script>
+
 </head>
-<body>
 
-<h2>Dashboard</h2>
+<body class="bg-gray-100 dark:bg-gray-900 transition duration-300">
 
-<h3>Balance: ₹{{balance}}</h3>
+<div class="max-w-4xl mx-auto p-4">
 
-<form method="post">
-    <input name="amount" placeholder="Amount">
-    <button name="action" value="deposit">Deposit</button>
-    <button name="action" value="withdraw">Withdraw</button>
-</form>
+    <!-- HEADER -->
+    <div class="flex justify-between items-center">
+        <h2 class="text-2xl font-bold text-gray-800 dark:text-white">
+            👋 Welcome, {{name}}
+        </h2>
 
-<h3>Transfer</h3>
-<form method="post">
-    <input name="target" placeholder="Target Account">
-    <input name="amount" placeholder="Amount">
-    <button name="action" value="transfer">Transfer</button>
-</form>
+        <div class="flex gap-2">
+            <button onclick="toggleTheme()" 
+                class="bg-gray-800 text-white px-3 py-1 rounded">
+                🌙 Toggle
+            </button>
 
-<h3>Transactions</h3>
-<ul>
-    {% for t in transactions %}
-        <li>{{t}}</li>
-    {% endfor %}
-</ul>
+            <a href="/logout" 
+                class="bg-red-500 text-white px-3 py-1 rounded">
+                Logout
+            </a>
+        </div>
+    </div>
 
-<a href="/logout">Logout</a>
+    <!-- BALANCE CARD -->
+    <div class="bg-white dark:bg-gray-800 p-6 rounded-xl shadow mt-4 text-center">
+        <h3 class="text-gray-500 dark:text-gray-300">Your Balance</h3>
+        <h1 class="text-4xl text-green-500 font-bold">₹{{balance}}</h1>
+    </div>
+
+    <!-- ACTIONS -->
+    <div class="grid md:grid-cols-2 gap-4 mt-4">
+
+        <!-- Deposit / Withdraw -->
+        <form method="post" class="bg-white dark:bg-gray-800 p-4 rounded-xl shadow">
+            <h4 class="font-bold mb-2 text-gray-700 dark:text-white">💰 Deposit / Withdraw</h4>
+
+            <input name="amount" type="number" step="0.01" required
+                class="w-full p-2 border rounded mb-2 dark:bg-gray-700 dark:text-white"
+                placeholder="Enter amount">
+
+            <button name="action" value="deposit"
+                class="bg-green-500 text-white w-full p-2 rounded mb-2">
+                Deposit
+            </button>
+
+            <button name="action" value="withdraw"
+                class="bg-yellow-500 text-white w-full p-2 rounded">
+                Withdraw
+            </button>
+        </form>
+
+        <!-- Transfer -->
+        <form method="post" class="bg-white dark:bg-gray-800 p-4 rounded-xl shadow">
+            <h4 class="font-bold mb-2 text-gray-700 dark:text-white">🔄 Transfer</h4>
+
+            <input name="target" required
+                class="w-full p-2 border rounded mb-2 dark:bg-gray-700 dark:text-white"
+                placeholder="Target Account">
+
+            <input name="amount" type="number" step="0.01" required
+                class="w-full p-2 border rounded mb-2 dark:bg-gray-700 dark:text-white"
+                placeholder="Amount">
+
+            <button name="action" value="transfer"
+                class="bg-blue-500 text-white w-full p-2 rounded">
+                Transfer
+            </button>
+        </form>
+
+    </div>
+
+    <!-- CHART -->
+    <div class="bg-white dark:bg-gray-800 p-4 rounded-xl shadow mt-4">
+        <h4 class="mb-2 font-bold text-gray-700 dark:text-white">📊 Transactions Chart</h4>
+        <canvas id="chart"></canvas>
+    </div>
+
+    <!-- TRANSACTIONS -->
+    <div class="bg-white dark:bg-gray-800 p-4 rounded-xl shadow mt-4">
+        <h4 class="mb-2 font-bold text-gray-700 dark:text-white">📜 Recent Transactions</h4>
+
+        <ul class="space-y-2">
+            {% for t in transactions %}
+                <li class="p-2 bg-gray-100 dark:bg-gray-700 rounded text-sm dark:text-white">
+                    {{t}}
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
+
+</div>
+
+<!-- CHART SCRIPT -->
+<script>
+const ctx = document.getElementById('chart');
+
+new Chart(ctx, {
+    type: 'bar',
+    data: {
+        labels: {{labels | safe}},
+        datasets: [{
+            label: 'Transactions',
+            data: {{values | safe}},
+            borderWidth: 1
+        }]
+    },
+    options: {
+        scales: {
+            y: {
+                beginAtZero: true
+            }
+        }
+    }
+});
+</script>
+
+<!-- DARK MODE -->
+<script>
+function toggleTheme() {
+    document.documentElement.classList.toggle('dark');
+
+    // Save preference
+    if (document.documentElement.classList.contains('dark')) {
+        localStorage.setItem('theme', 'dark');
+    } else {
+        localStorage.setItem('theme', 'light');
+    }
+}
+
+// Load saved theme
+if (localStorage.getItem('theme') === 'dark') {
+    document.documentElement.classList.add('dark');
+}
+</script>
 
 </body>
 </html>
