@@ -1,0 +1,11 @@
+{
+    "1001": {
+        "name": "DINESH K",
+        "pin": "scrypt:32768:8:1$wn9ovQSDKcvRYGPH$3d7c6edb07bc16314248d73fe66390b3a6854727192d3f6ec5a8df232cc543c07f9ef189541277827fd535832e4e573ba11c2bc2104313167692708f743f8e50",
+        "balance": 1933.0,
+        "transactions": [
+            "2026-04-19 16:38:41.234913|Deposit|2500.0",
+            "2026-04-19 16:38:59.447746|Withdraw|-567.0"
+        ]
+    }
+}

@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Dashboard</title>
+</head>
+<body>
+
+<h2>Dashboard</h2>
+
+<h3>Balance: ₹{{balance}}</h3>
+
+<form method="post">
+    <input name="amount" placeholder="Amount">
+    <button name="action" value="deposit">Deposit</button>
+    <button name="action" value="withdraw">Withdraw</button>
+</form>
+
+<h3>Transfer</h3>
+<form method="post">
+    <input name="target" placeholder="Target Account">
+    <input name="amount" placeholder="Amount">
+    <button name="action" value="transfer">Transfer</button>
+</form>
+
+<h3>Transactions</h3>
+<ul>
+    {% for t in transactions %}
+        <li>{{t}}</li>
+    {% endfor %}
+</ul>
+
+<a href="/logout">Logout</a>
+
+</body>
+</html>
